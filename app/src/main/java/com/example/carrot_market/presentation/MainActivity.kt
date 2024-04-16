@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onItemClickListener(post: Post) {
         val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("post", post)
 
         startActivity(intent)
     }
