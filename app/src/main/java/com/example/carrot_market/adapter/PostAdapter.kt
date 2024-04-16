@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.carrot_market.data.Post
 import com.example.carrot_market.databinding.ItemRvPostsBinding
-import java.text.DecimalFormat
+import com.example.carrot_market.Util
 
 class PostAdapter(
     val posts: List<Post>,
@@ -25,7 +25,7 @@ class PostAdapter(
                 ivProductImage.setImageResource(data.image)
                 tvProductName.text = data.name
                 tvAddress.text = data.address
-                tvProductPrice.text = dec.format(data.price)
+                tvProductPrice.text = Util.dec.format(data.price)
                 tvChatCount.text = data.chatCount.toString()
                 tvLikeCount.text = data.likeCount.toString()
             }
@@ -48,8 +48,4 @@ class PostAdapter(
     }
 
     override fun getItemCount() = posts.size
-
-    companion object {
-        val dec = DecimalFormat("#,###원")
-    }
 }
