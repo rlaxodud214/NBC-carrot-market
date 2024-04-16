@@ -7,8 +7,19 @@ import com.example.carrot_market.data.Post
 import com.example.carrot_market.databinding.ItemRvPostsBinding
 import java.text.DecimalFormat
 
-class PostAdapter(val posts: List<Post>) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
-    inner class ViewHolder(val binding: ItemRvPostsBinding): RecyclerView.ViewHolder(binding.root) {
+class PostAdapter(
+    val posts: List<Post>,
+    private val onClick: (Int) -> Unit,
+) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
+
+    inner class ViewHolder(val binding: ItemRvPostsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            itemView.setOnClickListener {
+                onClick(adapterPosition)
+            }
+        }
+
         fun bind(data: Post) {
             with(binding) {
                 ivProductImage.setImageResource(data.image)
