@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="16dp">
 
     <ImageView
@@ -22,15 +22,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="상품 이름"
-        android:textSize="17sp"
-        android:maxLines="2"
         android:ellipsize="end"
+        android:maxLines="2"
+        android:text="상품 이름"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_product_image"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_location"
+        android:id="@+id/tv_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -44,26 +45,26 @@
         android:id="@+id/tv_dot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:gravity="center"
         android:text="·"
         android:textColor="@color/gray"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_location"
-        app:layout_constraintStart_toEndOf="@id/tv_location"
-        app:layout_constraintTop_toTopOf="@+id/tv_location" />
+        app:layout_constraintBottom_toBottomOf="@+id/tv_address"
+        app:layout_constraintStart_toEndOf="@id/tv_address"
+        app:layout_constraintTop_toTopOf="@+id/tv_address" />
 
     <TextView
         android:id="@+id/tv_resent_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:text="3일 전"
         android:textColor="@color/gray"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_dot"
         app:layout_constraintStart_toEndOf="@id/tv_dot"
-        app:layout_constraintTop_toTopOf="@+id/tv_location" />
+        app:layout_constraintTop_toTopOf="@+id/tv_address" />
 
     <TextView
         android:id="@+id/tv_product_price"
@@ -72,10 +73,10 @@
         android:layout_marginTop="2dp"
         android:text="220,000원"
         android:textColor="@color/cattot"
-        android:textSize="14sp"
+        android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_location"
-        app:layout_constraintTop_toBottomOf="@id/tv_location" />
+        app:layout_constraintStart_toStartOf="@+id/tv_address"
+        app:layout_constraintTop_toBottomOf="@id/tv_address" />
 
     <ImageView
         android:id="@+id/iv_chat"
@@ -84,33 +85,33 @@
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_chat"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_chat"
-        app:layout_constraintTop_toTopOf="@+id/tv_chat" />
+        app:layout_constraintEnd_toStartOf="@+id/tv_chat_count"
+        app:layout_constraintTop_toTopOf="@+id/tv_chat_count" />
 
     <TextView
-        android:id="@+id/tv_chat"
+        android:id="@+id/tv_chat_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:text="3"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iv_message"
-        app:layout_constraintTop_toTopOf="@+id/iv_message"
+        app:layout_constraintEnd_toStartOf="@+id/iv_like"
+        app:layout_constraintTop_toTopOf="@+id/iv_like"
         app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
-        android:id="@+id/iv_message"
+        android:id="@+id/iv_like"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_heart_gray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_message"
-        app:layout_constraintTop_toTopOf="@+id/tv_message" />
+        app:layout_constraintEnd_toStartOf="@+id/tv_like_count"
+        app:layout_constraintTop_toTopOf="@+id/tv_like_count" />
 
     <TextView
-        android:id="@+id/tv_message"
+        android:id="@+id/tv_like_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="11"
