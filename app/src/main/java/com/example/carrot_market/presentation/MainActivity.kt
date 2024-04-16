@@ -1,4 +1,4 @@
-package com.example.carrot_market
+package com.example.carrot_market.presentation
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
