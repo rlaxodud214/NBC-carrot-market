@@ -1,11 +1,20 @@
 package com.example.carrot_market.presentation
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.DialogInterface
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.RingtoneManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.KeyEvent
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
@@ -24,29 +33,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        initView()
         initRecyclerView()
-    }
-
-    private fun initRecyclerView() {
-        val posts = PostDataSource.dummyData
-        val postAdapter = PostAdapter(posts) { position ->
-            onItemClickListener(posts[position])
-        }
-
-        val dividerItemDecoration = DividerItemDecoration(applicationContext, VERTICAL)
-
-        with(binding.rvPosts) {
-            adapter = postAdapter
-            layoutManager = LinearLayoutManager(context)
-            addItemDecoration(dividerItemDecoration) // item 간의 구분선 추가를 위함
-        }
-    }
-
-    private fun onItemClickListener(post: Post) {
-        val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra("post", post)
-
-        startActivity(intent)
     }
 
     /**
@@ -82,5 +70,95 @@ class MainActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    private fun initView() {
+        binding.ivNotification.setOnClickListener {
+            checkPermission()
+            showNotification()
+        }
+    }
+
+    private fun initRecyclerView() {
+        val posts = PostDataSource.dummyData
+
+        val postAdapter = PostAdapter(posts) { position ->
+            onItemClickListener(posts[position])
+        }
+
+        val dividerItemDecoration = DividerItemDecoration(applicationContext, VERTICAL)
+
+        with(binding.rvPosts) {
+            adapter = postAdapter
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(dividerItemDecoration) // item 간의 구분선 추가를 위함
+        }
+    }
+
+    private fun onItemClickListener(post: Post) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("post", post)
+
+        startActivity(intent)
+    }
+
+    private fun checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+                // 알림 권한이 없다면, 사용자에게 권한 요청
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                }
+                startActivity(intent)
+            }
+        }
+    }
+
+    private fun showNotification() {
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val builder: NotificationCompat.Builder
+
+        // 26 버전 이상
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "one-channel"
+            val channelName = "My Channel One"
+
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+
+            // 채널에 다양한 정보 설정
+            channel.apply {
+                description = "My Channel One Description"
+                setShowBadge(true)
+                val uri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                val audioAttributes = AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .build()
+                setSound(uri, audioAttributes)
+                enableVibration(true)
+            }
+
+            // 채널을 NotificationManager에 등록
+            manager.createNotificationChannel(channel)
+
+            // 채널을 이용하여 builder 생성
+            builder = NotificationCompat.Builder(this, channelId)
+        } else { // 26 버전 이하
+            builder = NotificationCompat.Builder(this)
+        }
+
+        // 알림의 기본 정보
+        builder.run {
+            setSmallIcon(R.mipmap.ic_launcher)
+            setWhen(System.currentTimeMillis())
+            setContentTitle("키워드 알림")
+            setContentText("설정한 키워드에 대한 알림이 도착했습니다!!")
+        }
+
+        manager.notify(11, builder.build())
     }
 }
