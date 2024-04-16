@@ -29,6 +29,10 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun initView() = with(binding) {
+        icBack.setOnClickListener {
+            finish()
+        }
+
         with(post) {
             ivProductImage.setImageResource(image)
             ivUserProfileImage.setImageResource(R.drawable.img_user)
