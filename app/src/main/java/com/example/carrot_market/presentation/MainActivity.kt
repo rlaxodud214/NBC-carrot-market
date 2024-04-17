@@ -10,13 +10,19 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.KeyEvent
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.example.carrot_market.R
 import com.example.carrot_market.adapter.PostAdapter
@@ -29,12 +35,18 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    private lateinit var fadeInAnimation: Animation
+    private lateinit var fadeOutAnimation: Animation
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initView()
         initRecyclerView()
+
+        fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out)
         initfloatActionButton()
     }
 
@@ -101,7 +113,35 @@ class MainActivity : AppCompatActivity() {
             adapter = postAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(dividerItemDecoration) // item 간의 구분선 추가를 위함
+            initAnimation()
         }
+    }
+
+    private fun RecyclerView.initAnimation() = with(this) {
+        addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                Log.d("Animation", "================")
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val position = layoutManager.findFirstVisibleItemPosition()
+                Log.d("Animation", "position: ${position}")
+
+                binding.fabToTop.apply {
+                    if (position == 0) {
+                        hide()
+//                        visibility = View.GONE
+//                        startAnimation(fadeOutAnimation)
+                        Log.d("Animation", "사라짐")
+                    } else if (visibility != View.VISIBLE) {
+                        show()
+//                        visibility = View.VISIBLE
+//                        startAnimation(fadeInAnimation)
+                        Log.d("Animation", "활성화")
+                    }
+                }
+            }
+        })
     }
 
     private fun onItemClickListener(post: Post) {
