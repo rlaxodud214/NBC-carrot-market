@@ -3,7 +3,7 @@ package com.example.carrot_market.data
 import com.example.carrot_market.R
 
 object PostDataSource {
-    val dummyData = listOf(
+    var dummyData = mutableListOf(
         Post(
             id = 1,
             image = R.drawable.img_product1,

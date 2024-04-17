@@ -22,7 +22,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.example.carrot_market.R
 import com.example.carrot_market.adapter.PostAdapter
@@ -37,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var fadeInAnimation: Animation
     private lateinit var fadeOutAnimation: Animation
+    private lateinit var postAdapter: PostAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,12 +101,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        val posts = PostDataSource.dummyData
+        var postData = PostDataSource.dummyData
 
-        val postAdapter = PostAdapter(posts) { position ->
-            onItemClickListener(posts[position])
+        val onPostClick: (Int) -> Unit = { position ->
+            onItemClickListener(postData[position])
         }
 
+        val onPostLongClick: (Int) -> Boolean = { position ->
+            onItemLongClickListener(position)
+        }
+
+        postAdapter = PostAdapter(onPostClick, onPostLongClick).apply {
+            posts = postData
+        }
         val dividerItemDecoration = DividerItemDecoration(applicationContext, VERTICAL)
 
         with(binding.rvPosts) {
@@ -149,6 +156,29 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("post", post)
 
         startActivity(intent)
+    }
+
+    private fun onItemLongClickListener(position: Int): Boolean {
+        var builder = AlertDialog.Builder(this)
+
+        val listener = object : DialogInterface.OnClickListener {
+            override fun onClick(p0: DialogInterface?, p1: Int) {
+                if (p1 == DialogInterface.BUTTON_POSITIVE) {
+                    PostDataSource.dummyData.removeAt(position)
+                    postAdapter.notifyItemRemoved(position)
+                }
+            }
+        }
+
+        with(builder) {
+            setIcon(R.drawable.ic_bubble_chat)
+            setTitle("상품 삭제")
+            setMessage("상품을 정말로 삭제하겠시습니까?")
+            setNegativeButton("취소", listener)
+            setPositiveButton("확인", listener)
+        }.show()
+
+        return true
     }
 
     private fun checkPermission() {

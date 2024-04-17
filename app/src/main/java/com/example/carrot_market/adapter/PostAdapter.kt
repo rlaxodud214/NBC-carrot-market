@@ -8,15 +8,18 @@ import com.example.carrot_market.databinding.ItemRvPostsBinding
 import com.example.carrot_market.Util
 
 class PostAdapter(
-    val posts: List<Post>,
     private val onClick: (Int) -> Unit,
+    private val onLongClick: (Int) -> Boolean,
 ) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
+
+    var posts: List<Post> = listOf()
 
     inner class ViewHolder(val binding: ItemRvPostsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            itemView.setOnClickListener {
-                onClick(adapterPosition)
+            with(itemView) {
+                setOnClickListener { onClick(adapterPosition) }
+                setOnLongClickListener { onLongClick(adapterPosition) }
             }
         }
 
