@@ -15,4 +15,5 @@ data class Post(
     val address: String,
     val likeCount: Int,
     val chatCount: Int,
+    val isLikeActivate: Boolean = false,
 ): Parcelable
