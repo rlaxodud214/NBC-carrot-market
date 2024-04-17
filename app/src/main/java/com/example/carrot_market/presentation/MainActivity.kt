@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.example.carrot_market.R
 import com.example.carrot_market.adapter.PostAdapter
-import com.example.carrot_market.data.Post
 import com.example.carrot_market.data.PostDataSource
 import com.example.carrot_market.databinding.ActivityMainBinding
 
@@ -104,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         var postData = PostDataSource.dummyData
 
         val onPostClick: (Int) -> Unit = { position ->
-            onItemClickListener(postData[position])
+            onItemClickListener(position)
         }
 
         val onPostLongClick: (Int) -> Boolean = { position ->
@@ -151,9 +150,10 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun onItemClickListener(post: Post) {
+    private fun onItemClickListener(position: Int) {
         val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra("post", post)
+        intent.putExtra("post", PostDataSource.dummyData[position])
+        intent.putExtra("post_position", position)
 
         startActivity(intent)
     }

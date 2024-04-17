@@ -204,9 +204,9 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
-            android:id="@+id/iv_heart"
+            android:id="@+id/iv_like"
             android:layout_width="24dp"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
             android:src="@drawable/ic_heart_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -218,7 +218,7 @@
             android:layout_height="0dp"
             android:layout_marginLeft="16dp"
             android:layout_marginVertical="8dp"
-            app:layout_constraintStart_toEndOf="@id/iv_heart"
+            app:layout_constraintStart_toEndOf="@id/iv_like"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
