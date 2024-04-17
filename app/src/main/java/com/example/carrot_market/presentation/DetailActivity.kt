@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.example.carrot_market.Extension.setHeartIcon
 import com.example.carrot_market.R
 import com.example.carrot_market.Util
 import com.example.carrot_market.data.Post
@@ -54,7 +55,7 @@ class DetailActivity : AppCompatActivity() {
                 isLikeActivate = !preLikeActivate
             )
 
-            switchHeartIcon(currentLikeActivate)
+            ivLike.setHeartIcon(currentLikeActivate)
 
             val actionText = if (currentLikeActivate) "에 추가" else "에서 삭제"
             it.showSnackbar(actionText)
@@ -68,6 +69,8 @@ class DetailActivity : AppCompatActivity() {
 
             tvProductName.text = name
             tvProductContent.text = content
+
+            ivLike.setHeartIcon(isLikeActivate)
             tvProductPrice.text = Util.dec.format(price)
         }
     }
@@ -78,16 +81,6 @@ class DetailActivity : AppCompatActivity() {
             it.anchorView = binding.ivLike
             it.show()
         }
-    }
-
-    private fun switchHeartIcon(likeActivate: Boolean) {
-        binding.ivLike.setImageResource(
-            if (likeActivate) {
-                R.drawable.ic_heart_fill
-            } else {
-                R.drawable.ic_heart_gray
-            }
-        )
     }
 
     // 스낵바 옵션 설정

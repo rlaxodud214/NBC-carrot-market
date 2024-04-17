@@ -2,7 +2,10 @@ package com.example.carrot_market.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.carrot_market.Extension.setHeartIcon
+import com.example.carrot_market.R
 import com.example.carrot_market.data.Post
 import com.example.carrot_market.databinding.ItemRvPostsBinding
 import com.example.carrot_market.Util
@@ -23,14 +26,15 @@ class PostAdapter(
             }
         }
 
-        fun bind(data: Post) {
-            with(binding) {
-                ivProductImage.setImageResource(data.image)
-                tvProductName.text = data.name
-                tvAddress.text = data.address
-                tvProductPrice.text = Util.dec.format(data.price)
-                tvChatCount.text = data.chatCount.toString()
-                tvLikeCount.text = data.likeCount.toString()
+        fun bind(data: Post) = with(binding) {
+            with(data) {
+                ivProductImage.setImageResource(image)
+                tvProductName.text = name
+                tvAddress.text = address
+                tvProductPrice.text = Util.dec.format(price)
+                tvChatCount.text = chatCount.toString()
+                ivLike.setHeartIcon(isLikeActivate)
+                tvLikeCount.text = (likeCount + if(isLikeActivate) 1 else 0).toString()
             }
         }
     }
