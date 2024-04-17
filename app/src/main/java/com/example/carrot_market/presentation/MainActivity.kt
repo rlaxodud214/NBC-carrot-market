@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         initView()
         initRecyclerView()
+        initfloatActionButton()
     }
 
     /**
@@ -76,6 +77,14 @@ class MainActivity : AppCompatActivity() {
         binding.ivNotification.setOnClickListener {
             checkPermission()
             showNotification()
+        }
+    }
+
+    private fun initfloatActionButton() {
+        with(binding) {
+            fabToTop.setOnClickListener {
+                rvPosts.smoothScrollToPosition(0)
+            }
         }
     }
 
