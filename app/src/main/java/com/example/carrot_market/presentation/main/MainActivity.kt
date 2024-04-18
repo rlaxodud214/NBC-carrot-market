@@ -1,4 +1,4 @@
-package com.example.carrot_market.presentation
+package com.example.carrot_market.presentation.main
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -24,9 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.example.carrot_market.R
-import com.example.carrot_market.adapter.PostAdapter
-import com.example.carrot_market.data.PostDataSource
+import com.example.carrot_market.data.source.PostDataSource
 import com.example.carrot_market.databinding.ActivityMainBinding
+import com.example.carrot_market.presentation.detail.DetailActivity
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {

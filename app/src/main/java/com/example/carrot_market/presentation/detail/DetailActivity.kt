@@ -1,15 +1,15 @@
-package com.example.carrot_market.presentation
+package com.example.carrot_market.presentation.detail
 
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.carrot_market.Extension.setHeartIcon
+import com.example.carrot_market.util.setHeartIcon
 import com.example.carrot_market.R
 import com.example.carrot_market.Util
-import com.example.carrot_market.data.Post
-import com.example.carrot_market.data.PostDataSource
+import com.example.carrot_market.data.model.Post
+import com.example.carrot_market.data.source.PostDataSource
 import com.example.carrot_market.databinding.ActivityDetailBinding
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar

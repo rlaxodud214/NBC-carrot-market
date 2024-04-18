@@ -1,4 +1,4 @@
-package com.example.carrot_market.data
+package com.example.carrot_market.data.model
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes

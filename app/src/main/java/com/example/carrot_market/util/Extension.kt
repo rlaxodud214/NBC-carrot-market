@@ -1,4 +1,4 @@
-package com.example.carrot_market.Extension
+package com.example.carrot_market.util
 
 import android.widget.ImageView
 import com.example.carrot_market.R

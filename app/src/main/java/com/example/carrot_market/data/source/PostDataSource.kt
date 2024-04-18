@@ -1,6 +1,7 @@
-package com.example.carrot_market.data
+package com.example.carrot_market.data.source
 
 import com.example.carrot_market.R
+import com.example.carrot_market.data.model.Post
 
 object PostDataSource {
     var dummyData = mutableListOf(

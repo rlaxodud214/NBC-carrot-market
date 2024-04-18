@@ -53,6 +53,13 @@ ___
 - [x] 상세 화면에서 좋아요 해제시 이전 상태로 되돌림
 ___
 
+### 리팩토링
+- [x] 디렉토리 구조 변경
+- [ ] activity에서 분리 - Notification
+- [ ] activity에서 Extension(util)으로 분리 - Dialog
+- [ ] activity에서 Extension(util)으로 분리 - Snackbar
+- [ ] 변수, 함수 이름 검토 및 수정
+
 ### Warning: Don'ts
 - [x] 아직 배우지 않은 기능은 쓰지말 것 (강의에서 배운 내용을 최대한 활용)
 - [x] GPT, Copilot등 AI를 사용한 코드 제출 금지
