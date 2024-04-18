@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 
-class ExitConfirmAlertDialogFragment(
+class ExitConfirmDialog(
     val positiveListener: (DialogInterface, Int) -> Unit
 ) : DialogFragment() {
 
@@ -21,6 +21,6 @@ class ExitConfirmAlertDialogFragment(
             .create()
 
     companion object {
-        const val TAG = "ExitConfirmAlertDialogFragment"
+        const val TAG = "ExitConfirmDialog"
     }
 }

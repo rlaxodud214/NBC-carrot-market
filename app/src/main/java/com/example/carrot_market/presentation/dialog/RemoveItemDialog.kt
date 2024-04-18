@@ -3,12 +3,11 @@ package com.example.carrot_market.presentation.dialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.carrot_market.R
 
-class RemoveItemConfirmAlertDialogFragment(
+class RemoveItemDialog(
     val positiveListener: (DialogInterface, Int) -> Unit
 ) : DialogFragment() {
 
@@ -24,6 +23,6 @@ class RemoveItemConfirmAlertDialogFragment(
             .create()
 
     companion object {
-        const val TAG = "RemoveItemConfirmAlertDialogFragment"
+        const val TAG = "RemoveItemDialog"
     }
 }

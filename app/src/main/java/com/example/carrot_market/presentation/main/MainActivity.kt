@@ -2,7 +2,6 @@ package com.example.carrot_market.presentation.main
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.DialogInterface
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.RingtoneManager
@@ -11,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.KeyEvent
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -23,37 +21,38 @@ import com.example.carrot_market.R
 import com.example.carrot_market.data.source.PostDataSource
 import com.example.carrot_market.databinding.ActivityMainBinding
 import com.example.carrot_market.presentation.detail.DetailActivity
-import com.example.carrot_market.presentation.dialog.ExitConfirmAlertDialogFragment
-import com.example.carrot_market.presentation.dialog.RemoveItemConfirmAlertDialogFragment
+import com.example.carrot_market.presentation.detail.DetailActivity.Companion.KEY_FOR_POSITION
+import com.example.carrot_market.presentation.dialog.ExitConfirmDialog
+import com.example.carrot_market.presentation.dialog.RemoveItemDialog
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private lateinit var postAdapter: PostAdapter
+    private lateinit var salesPostAdapter: SalesPostAdapter
     private var itemPositionByDetail = Int.MIN_VALUE
 
     // TODO : 외부로 빼기, check: context에 종속성 있음
     private val exitConfirmDialog by lazy {
-        ExitConfirmAlertDialogFragment() { _, _ ->
+        ExitConfirmDialog() { _, _ ->
             finish()
-        }.show(supportFragmentManager, ExitConfirmAlertDialogFragment.TAG)
+        }.show(supportFragmentManager, ExitConfirmDialog.TAG)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        initView()
         initRecyclerView()
-        initfloatActionButton()
+        initScrollToTopButton()
+        initNotifyActivateButton()
     }
 
     override fun onRestart() {
         super.onRestart()
 
-        postAdapter.notifyItemChanged(itemPositionByDetail)
+        salesPostAdapter.notifyItemChanged(itemPositionByDetail)
     }
 
     /**
@@ -65,6 +64,8 @@ class MainActivity : AppCompatActivity() {
      *     false : 다음 수신자(onKey~~~)가 이벤트를 처리하도록 허용하는 경우
      *
      * ref: https://developer.android.com/reference/android/view/KeyEvent.Callback
+     *
+     * TODO: TIL 정리 후 삭제할 것
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         // 그 버튼이 BACK일 때
@@ -76,14 +77,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initView() {
+    private fun initNotifyActivateButton() {
         binding.ivNotification.setOnClickListener {
-            checkPermission()
+            checkOrGetNotificationPermission()
             showNotification()
         }
     }
 
-    private fun initfloatActionButton() {
+    private fun initScrollToTopButton() {
         with(binding) {
             fabToTop.setOnClickListener {
                 rvPosts.smoothScrollToPosition(0)
@@ -92,33 +93,32 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        val onPostClickListener: (Int) -> Unit = { position ->
+        val onItemClickListener: (Int) -> Unit = { position ->
             runDetailActivity(position)
         }
 
-        val onPostLongClickListener: (Int) -> Boolean = { position ->
+        val onItemLongClickListener: (Int) -> Boolean = { position ->
             showDialogForItemRemove(position)
             true
         }
 
-        postAdapter = PostAdapter(
-            onClick = onPostClickListener,
-            onLongClick = onPostLongClickListener,
-        ).apply {
-            posts = PostDataSource.dummyData
-        }
+        salesPostAdapter = SalesPostAdapter(
+            onClick = onItemClickListener,
+            onLongClick = onItemLongClickListener,
+        )
+        salesPostAdapter.salesPosts = PostDataSource.dummyData
 
         val dividerItemDecoration = DividerItemDecoration(applicationContext, VERTICAL)
 
         with(binding.rvPosts) {
-            adapter = postAdapter
+            adapter = salesPostAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(dividerItemDecoration) // item 간의 구분선 추가를 위함
-            initAnimation()
+            this.setVisibleFloatingButton()
         }
     }
 
-    private fun RecyclerView.initAnimation() = with(this) {
+    private fun RecyclerView.setVisibleFloatingButton() = with(this) {
         addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -137,22 +137,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun runDetailActivity(position: Int) {
         val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra("post_position", position)
+        intent.putExtra(KEY_FOR_POSITION, position)
         itemPositionByDetail = position
 
         startActivity(intent)
     }
 
     private fun showDialogForItemRemove(position: Int): Boolean {
-        RemoveItemConfirmAlertDialogFragment() {  _, _ ->
+        RemoveItemDialog() { _, _ ->
             PostDataSource.dummyData.removeAt(position)
-            postAdapter.notifyItemRemoved(position)
-        }.show(supportFragmentManager, RemoveItemConfirmAlertDialogFragment.TAG)
+            salesPostAdapter.notifyItemRemoved(position)
+        }.show(supportFragmentManager, RemoveItemDialog.TAG)
 
         return true
     }
 
-    private fun checkPermission() {
+    private fun checkOrGetNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
                 // 알림 권한이 없다면, 사용자에게 권한 요청
