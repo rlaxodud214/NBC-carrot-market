@@ -55,9 +55,7 @@ ___
 
 ### 리팩토링
 - [x] 디렉토리 구조 변경
-- [ ] activity에서 분리 - Notification
-- [ ] activity에서 Extension(util)으로 분리 - Dialog
-- [ ] activity에서 Extension(util)으로 분리 - Snackbar
+- [x] activity에서 Extension(util)으로 분리 - Dialog
 - [ ] 변수, 함수 이름 검토 및 수정
 
 ### Warning: Don'ts
